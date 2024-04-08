@@ -8,7 +8,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const registerUser = asyncHandler(async (req, res) => {
     // get user details from frontend
     // validation -- not empty
-    // check if user already exits: username , email
+    // check if user already exits: ( username , email )
     // check for image, check for avtar
     // upload to them to cloudinary, avatar
     // create user object - create enter in db
@@ -30,7 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     //3. check if user already exits: username , email
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or:[ { username }, { email } ]
     })
 
