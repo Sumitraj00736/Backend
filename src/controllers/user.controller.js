@@ -35,11 +35,11 @@ const registerUser = asyncHandler(async (req, res) => {
     })
 
     if(existedUser){
-        throw new ApiError(409, "User with email or username already exists")
+        throw new ApiError(409, " User with email or username already exists")
     }
 
     //4. check for image, check for avtar    
-    const avatarLocalPath = req.files?.avatar[0]?.path
+    const avatarLocalPath = req.files.avatar[0]?.path
     const coverImageLocalPath = req.files?.coverImage[0]?.path
 
     if(!avatarLocalPath){
@@ -57,10 +57,10 @@ const registerUser = asyncHandler(async (req, res) => {
     //6. create user object - create enter in db
     const user =  await User.create({
         fullName,
-        avatar: avatar.url,
         coverImage: coverImage?.url || "",
         email,
         password,
+        avatar: avatar.url,
         username: username.toLowerCase()
     })
 
@@ -73,9 +73,9 @@ const registerUser = asyncHandler(async (req, res) => {
     if(!createdUser){
         throw new ApiError(500,"something went wrong while registering thr user")
     }
-
+ 
     //9. return response
-    return res.this.status(201).json(
+    return res.status(201).json(
         new ApiResponse(200, createdUser, "user registered sucessfully")
     )
 });
