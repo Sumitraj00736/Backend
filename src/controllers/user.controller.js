@@ -20,7 +20,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     //1. get user details from frontend
     const{ fullName, email,  username, password } = req.body
-    console.log("email:", email);
+    // console.log("email:", email);
 
     //2. validation -- not empty
     if( [fullName, email, username, password].some((field)=>
@@ -39,8 +39,12 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     //4. check for image, check for avtar    
-    const avatarLocalPath = req.files.avatar[0]?.path
-    const coverImageLocalPath = req.files?.coverImage[0]?.path
+    console.log(req.files.avatar[0]?.path)
+    const avatarLocalPath = req.files?.avatar[0]?.path
+    let coverImageLocalPath
+    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0 ) {
+        coverImageLocalPath = req.files.coverImage[0].path
+    }
 
     if(!avatarLocalPath){
         throw new ApiError(400,"Avatar file is required")
@@ -63,7 +67,7 @@ const registerUser = asyncHandler(async (req, res) => {
         avatar: avatar.url,
         username: username.toLowerCase()
     })
-
+console.log(user)
     //7. remove password and refresh token field from response    
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
